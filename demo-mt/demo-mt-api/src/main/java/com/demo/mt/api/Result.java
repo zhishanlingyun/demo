@@ -1,6 +1,8 @@
 package com.demo.mt.api;
 
-public class Result {
+import java.io.Serializable;
+
+public class Result implements Serializable {
 
     private Long code;
 
@@ -24,5 +26,13 @@ public class Result {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    @Override
+    public String toString() {
+        return "Result{" +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
+                '}';
     }
 }

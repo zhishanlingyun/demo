@@ -1,6 +1,8 @@
 package com.demo.mt.api;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private Long id;
 
@@ -20,5 +22,13 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

@@ -13,16 +13,16 @@
 
     <!-- motan协议 -->
     <motan:protocol id="bootcampProto" default="true" name="motan2" serialization="hessian2"
-                    haStrategy="failfast" loadbalance="roundrobin"/>
+                    haStrategy="failover" retries="2" loadbalance="roundrobin"/>
 
     <!-- 基础配置，多个rpc服务使用相同的基础配置. group和module定义具体的服务池 -->
     <motan:basicReferer id="clientBasicConfig" registry="bootcampRegistry" protocol="bootcampProto"
-                        group="mtdemo" application="mtdemo-rpc-client" module="demo-mt-client"
+                        group="mtdemo" application="mtdemorpc" module="mtdemo-rpc"
                         accessLog="true" requestTimeout="100"/>
 
     <!-- 具体rpc服务配置，声明实现的接口类。需要根据业务情况设置合适的超时时间 -->
     <motan:referer id="helloReferer" interface="com.demo.mt.api.HelloService"
-                   basicReferer="clientBasicConfig" requestTimeout="300"/>
+                   basicReferer="clientBasicConfig"/>
 
 
 
