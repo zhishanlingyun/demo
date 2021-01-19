@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="warn" packages="org.apache.logging.log4j.core,com.getsentry.raven.log4j2">
+    <Properties>
+        <Property name="log-path">${bundle:application:log.path}</Property>
+    </Properties>
+    <appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout>
+                <pattern>
+                    %highlight{[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} }{FATAL=Bright Red, INFO=Bright Magenta, WARN=Bright Yellow, ERROR=Bright Green, DEBUG=Bright Cyan, TRACE=Bright White} %msg%n
+                </pattern>
+            </PatternLayout>
+        </Console>
+
+        <RollingFile name="FILE_DEBUG" fileName="${log-path}/debug.log" filePattern="${log-path}/debug-%d{yyyy-MM-dd}.log">
+            <Filters>
+                <ThresholdFilter level="debug" onMatch="NEUTRAL" onMismatch="DENY"/>
+                <ThresholdFilter level="info" onMatch="DENY" onMismatch="ACCEPT"/>
+            </Filters>
+
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} [TxId : %X{PtxId} , SpanId : %X{PspanId}] - %msg%n
+                </pattern>
+            </PatternLayout>
+        </RollingFile>
+
+        <RollingFile name="FILE_INFO" fileName="${log-path}/info.log" filePattern="${log-path}/info-%d{yyyy-MM-dd}.log">
+            <Filters>
+                <ThresholdFilter level="info" onMatch="NEUTRAL" onMismatch="DENY"/>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="ACCEPT"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} [TxId : %X{PtxId} , SpanId : %X{PspanId}] - %msg%n
+                </pattern>
+            </PatternLayout>
+        </RollingFile>
+
+        <RollingFile name="FILE_ERROR" fileName="${log-path}/error.log" filePattern="${log-path}/error-%d{yyyy-MM-dd}.log">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} [TxId : %X{PtxId} , SpanId : %X{PspanId}] - %msg%n
+                </pattern>
+            </PatternLayout>
+        </RollingFile>
+
+        <RollingFile name="FILE_ACCESS" fileName="${log-path}/access.log" filePattern="${log-path}/access-%d{yyyy-MM-dd}.log">
+            <Filters>
+                <ThresholdFilter level="info" onMatch="ACCEPT" />
+            </Filters>
+
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} [TxId : %X{PtxId} , SpanId : %X{PspanId}] - %msg%n
+                </pattern>
+            </PatternLayout>
+        </RollingFile>
+
+    </appenders>
+
+    <loggers>
+
+        <logger name="access" additivity="false" level="info">
+            <appender-ref ref="FILE_ACCESS" />
+            <appender-ref ref="STDOUT" />
+        </logger>
+
+        <root level="info">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="FILE_DEBUG"/>
+            <appender-ref ref="FILE_INFO"/>
+            <appender-ref ref="FILE_ERROR"/>
+        </root>
+    </loggers>
+</configuration>

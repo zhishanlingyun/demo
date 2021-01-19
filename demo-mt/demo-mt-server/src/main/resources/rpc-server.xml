@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:motan="http://api.weibo.com/schema/motan"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://api.weibo.com/schema/motan http://api.weibo.com/schema/motan.xsd">
+
+
+    <!-- config server 通用配置，线上环境使用config.api.weibo.com:80 -->
+    <motan:registry id="mtRegistry" regProtocol="vintage" address="10.77.96.117:2180"/>
+
+
+    <!-- motan协议 -->
+    <motan:protocol id="mtProto" name="motan2" serialization="hessian2"
+                    minWorkerThread="2" maxWorkerThread="5"/>
+
+    <!-- 基础配置，多个rpc服务使用相同的基础配置. group和module定义具体的服务池 -->
+    <motan:basicService id="serviceBasicConfig" registry="mtRegistry" export="mtProto:8000"
+                        group="mtdemo" application="mtdemorpc" module="mtdemo-rpc"
+                        accessLog="true" requestTimeout="200"/>
+
+    <!-- 具体rpc服务配置，声明实现的接口类。需要根据业务情况设置合适的超时时间 -->
+    <motan:service interface="com.demo.mt.api.HelloService" ref="helloServiceImpl" basicService="serviceBasicConfig"/>
+
+
+</beans>

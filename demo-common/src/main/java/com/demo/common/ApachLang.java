@@ -6,6 +6,11 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.builder.*;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Random;
+import java.util.stream.Stream;
+
 /**
  * apache-lang3 使用用例
  */
@@ -69,8 +74,44 @@ public class ApachLang {
 
 
     public static void main(String[] args) {
+
         //initCollects();
         //clone0();
-        buildToString();
+        //buildToString();
+
+
+        System.out.println((133270 & Integer.MAX_VALUE)%20);
+        String a = "kol_123123";
+        String b = "kol_job";
+        System.out.println(!"job".equals(a.split("_")[1]));
+        System.out.println(!"job".equals(b.split("_")[1]));
+        //System.out.println(Integer.);
+
+        Random random = new Random(100);
+        for(int i=0;i<10;i++){
+            System.out.println(random.nextInt(1000));
+        }
+        PriorityQueue<Integer> queue = new PriorityQueue<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1-o2;
+            }
+        });
+        for(int n=0;n<100;n++){
+            if(queue.size()<10){
+                queue.add(n);
+            }else {
+                Integer c = queue.peek();
+                if(c<n){
+                    queue.poll();
+                    queue.add(n);
+                }
+            }
+
+        }
+
+        while (!queue.isEmpty()){
+            System.out.println(queue.poll());
+        }
     }
 }
