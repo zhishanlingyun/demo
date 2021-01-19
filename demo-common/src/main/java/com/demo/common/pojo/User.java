@@ -1,5 +1,7 @@
 package com.demo.common.pojo;
 
+import java.util.Arrays;
+
 public class User {
 
     private Long id;
@@ -50,5 +52,16 @@ public class User {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address=" + address +
+                ", interests=" + Arrays.toString(interests) +
+                ", age=" + age +
+                '}';
     }
 }
