@@ -1,5 +1,9 @@
 package com.dem.bd.mr;
 
+import com.dem.bd.mr.record.CrownInfo;
+import com.dem.bd.mr.record.Node;
+import com.dem.bd.mr.tool.Json;
+import com.google.gson.Gson;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
@@ -58,6 +62,7 @@ public class CrownTopMr {
         boolean success = job.waitForCompletion(true);
         logger.info("计算完成,耗时 {} 秒",(System.currentTimeMillis()-start)/1000);
 
+
     }
 
     public static class TopMapper extends Mapper<LongWritable, Text,Text,Row>{
@@ -115,13 +120,12 @@ public class CrownTopMr {
         }
     }
 
-    /*public static class TopCombiner extends Reducer<Text,Row,Text, Row>{
-
-        public static int TOPN = 10;
+    public static class TopReducer extends Reducer<Text,Row,NullWritable,CrownInfo>{
 
         @Override
         protected void reduce(Text key, Iterable<Row> values, Context context) throws IOException, InterruptedException {
-            PriorityQueue<Row> queue = new PriorityQueue<>(new Comparator<Row>() {
+
+            PriorityQueue<Row> q = new PriorityQueue<>(new Comparator<Row>() {
                 @Override
                 public int compare(Row o1, Row o2) {
                     return o1.count-o2.count;
@@ -130,74 +134,32 @@ public class CrownTopMr {
             Iterator<Row> it = values.iterator();
             while (it.hasNext()){
                 Row r = it.next();
-                if(queue.size()<TOPN){
-                    queue.add(r);
-                }else {
-                    Row min = queue.peek();
-                    if(min.getCount()<r.getCount()){
-                        queue.poll();
-                        queue.add(r);
-                    }
-                }
-
-            }
-            if(!queue.isEmpty()){
-                while (!queue.isEmpty()){
-                    Row top = queue.poll();
-                    String jobId = String.valueOf(top.getJobId());
-                    String type = top.getField().split("_")[0];
-                    context.write(new Text(jobId+"@"+type),top);
-                }
-            }
-        }
-    }*/
-
-    public static class TopReducer extends Reducer<Text,Row,NullWritable,Row>{
-
-        private PriorityQueue<Row> q = new PriorityQueue<>(new Comparator<Row>() {
-            @Override
-            public int compare(Row o1, Row o2) {
-                return o1.count-o2.count;
-            }
-        });
-
-        @Override
-        protected void reduce(Text key, Iterable<Row> values, Context context) throws IOException, InterruptedException {
-
-            /*Iterator<Row> it = values.iterator();
-            while (it.hasNext()){
-                Row r = it.next();
+                Row rw = new Row();
+                rw.set(r.getJobId(),r.getField(),r.getCount());
+                //list.add(rw);
                 if(q.size()<TOPN){
                     if(q.contains(r)){
                         continue;
                     }
-                    q.add(r);
+                    q.add(rw);
                 }else {
                     Row min = q.peek();
                     if(min.getCount()<r.getCount()){
                         q.poll();
-                        q.add(r);
+                        q.add(rw);
                     }
                 }
-            }*/
-
-            int n = 10;
-            Iterator<Row> it = values.iterator();
-            while (it.hasNext()){
-                Row row = it.next();
-                context.write(NullWritable.get(),row);
-                /*if(n++ >10){
-                    break;
-                };*/
             }
-        }
-
-        @Override
-        protected void cleanup(Context context) throws IOException, InterruptedException {
+            CrownInfo info = new CrownInfo();
+            info.setJobId(Integer.valueOf(key.toString().split("@")[0]));
+            List<Node> nodes = new ArrayList<>();
             while (!q.isEmpty()){
                 Row top = q.poll();
-                context.write(NullWritable.get(),top);
+                Node node = new Node(top.getField(),"desc",top.getCount());
+                nodes.add(node);
             }
+            info.setStar(Json.toJson(nodes));
+            context.write(NullWritable.get(),info);
         }
     }
 
@@ -208,6 +170,7 @@ public class CrownTopMr {
 
             String line = crownJob.getField();
             String flag = line.split("_")[0];
+
             return (((crownJob.jobId+flag).hashCode()) & Integer.MAX_VALUE)%i;
 
         }

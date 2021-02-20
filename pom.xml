@@ -26,6 +26,7 @@
         <module>demo-mt</module>
         <module>demo-druid</module>
         <module>demo-bd</module>
+        <module>demo-mybatis</module>
     </modules>
 
 
@@ -168,7 +169,11 @@
                 <artifactId>commons-csv</artifactId>
                 <version>1.8</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.8.6</version>
+            </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
