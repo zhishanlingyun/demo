@@ -27,6 +27,7 @@
         <module>demo-druid</module>
         <module>demo-bd</module>
         <module>demo-mybatis</module>
+        <module>demo-springboot-sa</module>
     </modules>
 
 
