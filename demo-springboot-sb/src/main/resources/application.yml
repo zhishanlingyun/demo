@@ -1,0 +1,17 @@
+server:
+  port: 8060
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9090/eureka/
+  instance:
+    appname: app-sb
+    metadata-map:
+      zone:
+        aliyun
+
+
+spring:
+  application:
+    name: sb
+

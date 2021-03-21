@@ -28,6 +28,7 @@
         <module>demo-bd</module>
         <module>demo-mybatis</module>
         <module>demo-springboot-sa</module>
+        <module>demo-springboot-sb</module>
     </modules>
 
 
@@ -219,6 +220,13 @@
                 <version>4.1.51.Final</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Greenwich.SR3</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

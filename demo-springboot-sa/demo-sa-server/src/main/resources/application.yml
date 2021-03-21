@@ -1,0 +1,11 @@
+server:
+  port: ${random.int[8000,8010]}
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9090/eureka/
+
+
+spring:
+  application:
+    name: sa
