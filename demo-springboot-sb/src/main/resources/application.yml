@@ -14,4 +14,3 @@ eureka:
 spring:
   application:
     name: sb
-
