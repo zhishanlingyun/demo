@@ -5,6 +5,13 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import java.util.List;
 
+/**
+ * 依赖
+ * 配置
+ * 调度器
+ * 任务
+ * 触发器
+ */
 public class QuartzDemo {
 
 
