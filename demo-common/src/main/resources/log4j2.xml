@@ -5,7 +5,7 @@
     </Properties>
     <appenders>
         <Console name="STDOUT" target="SYSTEM_OUT">
-            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout>
                 <pattern>
                     %highlight{[${sys:IP}_${sys:AppKey}] [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} [TxId : %X{PtxId} , SpanId : %X{PspanId}] -}{FATAL=Bright Red, INFO=Bright Magenta, WARN=Bright Yellow, ERROR=Bright Green, DEBUG=Bright Cyan, TRACE=Bright White} %msg%n
@@ -63,6 +63,9 @@
     <loggers>
 
         <logger name="access" additivity="false" level="info">
+            <appender-ref ref="STDOUT" />
+        </logger>
+        <logger name="org.quartz" additivity="false" level="info">
             <appender-ref ref="STDOUT" />
         </logger>
 
